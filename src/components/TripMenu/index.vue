@@ -3,62 +3,64 @@
     <div class="container">
       <div @mouseleave="menuLeaveHandler" @mouseenter="showTripMenu">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort" v-show="showMenu" @click.prevent="searchSth">
-          <div class="all-sort-list2">
-            <!-- :style="{
+        <transition name="tripMenuAnim">
+          <div class="sort" v-show="showMenu" @click.prevent="searchSth">
+            <div class="all-sort-list2">
+              <!-- :style="{
               background: index === currentFirstNavIndex ? 'skyblue' : 'white',
             }" -->
-            <div
-              class="item"
-              v-for="(firstItem, index) in categoryList"
-              :key="firstItem.categoryId"
-              :class="{ cur: index === currentFirstNavIndex }"
-            >
-              <h3 @mouseenter="changeIndex(index)">
-                <a
-                  :data-categoryName="firstItem.categoryName"
-                  :data-category1Id="firstItem.categoryId"
-                  href=""
-                  >{{ firstItem.categoryName }}</a
-                >
-              </h3>
               <div
-                class="item-list clearfix"
-                v-show="index == currentFirstNavIndex"
+                class="item"
+                v-for="(firstItem, index) in categoryList"
+                :key="firstItem.categoryId"
+                :class="{ cur: index === currentFirstNavIndex }"
               >
+                <h3 @mouseenter="changeIndex(index)">
+                  <a
+                    :data-categoryName="firstItem.categoryName"
+                    :data-category1Id="firstItem.categoryId"
+                    href=""
+                    >{{ firstItem.categoryName }}</a
+                  >
+                </h3>
                 <div
-                  class="subitem"
-                  v-for="secondItem in firstItem.categoryChild"
-                  :key="secondItem.categoryId"
+                  class="item-list clearfix"
+                  v-show="index == currentFirstNavIndex"
                 >
-                  <dl class="fore">
-                    <dt>
-                      <a
-                        :data-categoryName="secondItem.categoryName"
-                        :data-category2Id="secondItem.categoryId"
-                        href=""
-                        >{{ secondItem.categoryName }}</a
-                      >
-                    </dt>
-                    <dd>
-                      <em
-                        v-for="thirdItem in secondItem.categoryChild"
-                        :key="thirdItem.categoryId"
-                      >
+                  <div
+                    class="subitem"
+                    v-for="secondItem in firstItem.categoryChild"
+                    :key="secondItem.categoryId"
+                  >
+                    <dl class="fore">
+                      <dt>
                         <a
-                          :data-categoryName="thirdItem.categoryName"
-                          :data-category3Id="thirdItem.categoryId"
+                          :data-categoryName="secondItem.categoryName"
+                          :data-category2Id="secondItem.categoryId"
                           href=""
-                          >{{ thirdItem.categoryName }}</a
+                          >{{ secondItem.categoryName }}</a
                         >
-                      </em>
-                    </dd>
-                  </dl>
+                      </dt>
+                      <dd>
+                        <em
+                          v-for="thirdItem in secondItem.categoryChild"
+                          :key="thirdItem.categoryId"
+                        >
+                          <a
+                            :data-categoryName="thirdItem.categoryName"
+                            :data-category3Id="thirdItem.categoryId"
+                            href=""
+                            >{{ thirdItem.categoryName }}</a
+                          >
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
       <nav class="nav">
         <a href="###">服装城</a>
@@ -126,7 +128,9 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("home/getBaseCategoryList");
+    // if (this.$store.state.home.baseCategoryList.length == 0) {
+    //   this.$store.dispatch("home/getBaseCategoryList");
+    // }
     if (this.$route.name === "search") this.showMenu = false;
   },
 };
@@ -184,7 +188,8 @@ function throttle(func, delay) {
       left: 0;
       top: 45px;
       width: 210px;
-      height: 461px;
+      height: auto;
+      max-height: 10000px;
       position: absolute;
       background: #fafafa;
       z-index: 999;
@@ -267,6 +272,35 @@ function throttle(func, delay) {
             }
           } */
         }
+      }
+    }
+
+    .tripMenuAnim-enter,
+    .tripMenuAnim-leave-to {
+      max-height: 0px;
+      & > div {
+        opacity: 0;
+      }
+    }
+
+    .tripMenuAnim-enter-to,
+    .tripMenuAnim-leave {
+      & > div {
+        opacity: 100%;
+      }
+    }
+
+    .tripMenuAnim-enter-active {
+      transition: max-height 0.5s ease-in-out;
+      & > div {
+        transition: opacity 0.5s ease-in-out;
+      }
+    }
+
+    .tripMenuAnim-leave-active {
+      transition: max-height 0.5s ease-in-out;
+      & > div {
+        transition: opacity 0.5s ease-in-out;
       }
     }
   }

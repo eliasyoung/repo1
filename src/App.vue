@@ -20,6 +20,9 @@ export default {
     AppHeader,
     AppFooter,
   },
+  mounted() {
+    this.$store.dispatch("home/getBaseCategoryList");
+  },
 };
 </script>
 

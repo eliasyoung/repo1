@@ -41,5 +41,8 @@ VueRouter.prototype.replace = function (location, resolve, reject) {
 new Vue({
   render: (h) => h(App),
   router,
-  store
+  store,
+  mounted(){
+    // store.dispatch("home/getBaseCategoryList");
+  }
 }).$mount("#app");
