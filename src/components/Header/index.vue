@@ -75,8 +75,11 @@ export default {
       }); */
       this.$router.push({
         name: "search",
-        params: { searchKeyword: "" || undefined },
-        query: { k: this.searchKeyword.toUpperCase() },
+        params: {
+          keyword: this.searchKeyword.toUpperCase(),
+        },
+        query: this.$route.query,
+        // query: { k: this.searchKeyword.toUpperCase() },
       });
     },
   },

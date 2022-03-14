@@ -21,7 +21,7 @@ export default new VueRouter({
       component: Home,
     },
     {
-      path: "/search/:searchKeyword?",
+      path: "/search/:keyword?",
       // path: "/search",
       component: Search,
       name: "search",

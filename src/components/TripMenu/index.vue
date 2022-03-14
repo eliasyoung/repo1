@@ -116,12 +116,15 @@ export default {
         } else {
           target.query.category3Id = category3id;
         }
+        if (JSON.stringify(this.$route.params) != "{}")
+          target.params = this.$route.params;
         this.$router.push(target);
       }
     },
     menuLeaveHandler() {
       this.currentFirstNavIndex = -1;
-      if (this.$route.path === "/search") this.showMenu = false;
+      // if (this.$route.path === "/search") this.showMenu = false;
+      if (this.$route.name === "search") this.showMenu = false;
     },
     showTripMenu() {
       this.showMenu = true;

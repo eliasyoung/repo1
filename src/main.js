@@ -5,9 +5,11 @@ Vue.config.productionTip = false;
 
 import router from "@/router/index";
 import VueRouter from "vue-router";
-import store from './store'
+import store from "./store";
 
 import TripMenu from "@/components/TripMenu";
+
+import "@/mock/mockServe";
 
 Vue.component(TripMenu.name, TripMenu);
 
@@ -42,7 +44,7 @@ new Vue({
   render: (h) => h(App),
   router,
   store,
-  mounted(){
+  mounted() {
     // store.dispatch("home/getBaseCategoryList");
-  }
+  },
 }).$mount("#app");
