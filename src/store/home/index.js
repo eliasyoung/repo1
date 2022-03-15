@@ -1,19 +1,31 @@
 /* Home Store */
-import { getBaseCategoryList } from "@/api/index";
+import { getBaseCategoryList, getMockBannerData } from "@/api/index";
 
 const state = {
   baseCategoryList: [],
+  bannerData: [],
 };
 const mutations = {
-  storeBaseCategoryList(state, payload) {
+  STOREBASECATEGORYLIST(state, payload) {
     state.baseCategoryList = payload;
+  },
+  STOREBANNERDATA(state, payload) {
+    state.bannerData = payload;
   },
 };
 const actions = {
   getBaseCategoryList({ commit }) {
     getBaseCategoryList().then((res) => {
       if (res.code === 200) {
-        commit("storeBaseCategoryList", res.data);
+        commit("STOREBASECATEGORYLIST", res.data);
+      }
+    });
+  },
+  getBannerData({ commit }) {
+    // mock data for now
+    getMockBannerData().then((res) => {
+      if (res.code === 200) {
+        commit("STOREBANNERDATA", res.data);
       }
     });
   },

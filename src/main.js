@@ -11,6 +11,8 @@ import TripMenu from "@/components/TripMenu";
 
 import "@/mock/mockServe";
 
+import "swiper/css/swiper.css";
+
 Vue.component(TripMenu.name, TripMenu);
 
 const originPush = VueRouter.prototype.push;

@@ -5,18 +5,9 @@
         <!--banner轮播-->
         <div class="swiper-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="../images/banner1.jpg" />
+            <div class="swiper-slide" v-for="item in bannerData" :key="item.id">
+              <img :src="item.imgUrl" />
             </div>
-<!--             <div class="swiper-slide">
-              <img src="../images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="../images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="../images/banner4.jpg" />
-            </div> -->
           </div>
           <!-- 如果需要分页器 -->
           <div class="swiper-pagination"></div>
@@ -100,8 +91,51 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import Swiper from "swiper";
+
 export default {
   name: "ListContainer",
+  computed: {
+    ...mapState("home", ["bannerData"]),
+  },
+  watch: {
+    bannerData: {
+      handler(newV, oldV) {
+        this.$nextTick(() => {
+          const swiper = new Swiper(
+            document.querySelector(".swiper-container"),
+            {
+              // configure Swiper to use modules
+              loop: true,
+
+              autoplay: {
+                delay: 3000,
+              },
+
+              // If we need pagination
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+
+              // Navigation arrows
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+            }
+          );
+          return [swiper, oldV, newV];
+        });
+      },
+    },
+  },
+  mounted() {
+    if (this.$store.state.home.bannerData.length == 0) {
+      this.$store.dispatch("home/getBannerData");
+    }
+  },
 };
 </script>
 
