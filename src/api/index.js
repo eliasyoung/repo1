@@ -16,3 +16,12 @@ export const getMockBannerData = () => {
 };
 
 export const getMockFloorData = () => mockRequests.get("/floor");
+
+/* export const getSearchListData = (params) => {
+  return requests({
+    method: "post",
+    url: "/list",
+    data: params,
+  });
+}; */
+export const getSearchListData = (params) => requests.post("/list", params);
