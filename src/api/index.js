@@ -14,3 +14,5 @@ export const getMockBannerData = () => {
     url: "/banner",
   });
 };
+
+export const getMockFloorData = () => mockRequests.get("/floor");

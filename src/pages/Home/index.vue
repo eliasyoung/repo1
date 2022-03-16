@@ -5,8 +5,11 @@
     <TodayRecommend />
     <HomeRank />
     <GuessYouLike />
-    <FloorComponent />
-    <FloorComponent />
+    <FloorComponent
+      v-for="singleFloorData in floorData"
+      :key="singleFloorData.id"
+      :fData="singleFloorData"
+    />
     <BrandComponent />
   </div>
 </template>
@@ -18,9 +21,13 @@ import HomeRank from "@/pages/Home/Rank";
 import GuessYouLike from "@/pages/Home/GuessYouLike";
 import FloorComponent from "@/pages/Home/FloorComponent";
 import BrandComponent from "@/pages/Home/BrandComponent";
+import { mapState } from "vuex";
 
 export default {
   name: "AppHome",
+  computed: {
+    ...mapState("home", ["floorData"]),
+  },
   components: {
     ListContainer,
     TodayRecommend,
@@ -28,6 +35,9 @@ export default {
     GuessYouLike,
     FloorComponent,
     BrandComponent,
+  },
+  mounted() {
+    this.$store.dispatch("home/getFloorData");
   },
 };
 </script>

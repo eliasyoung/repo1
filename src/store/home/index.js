@@ -1,9 +1,14 @@
 /* Home Store */
-import { getBaseCategoryList, getMockBannerData } from "@/api/index";
+import {
+  getBaseCategoryList,
+  getMockBannerData,
+  getMockFloorData,
+} from "@/api/index";
 
 const state = {
   baseCategoryList: [],
   bannerData: [],
+  floorData: [],
 };
 const mutations = {
   STOREBASECATEGORYLIST(state, payload) {
@@ -11,6 +16,9 @@ const mutations = {
   },
   STOREBANNERDATA(state, payload) {
     state.bannerData = payload;
+  },
+  STOREFLOORDATA(state, payload) {
+    state.floorData = payload;
   },
 };
 const actions = {
@@ -26,6 +34,13 @@ const actions = {
     getMockBannerData().then((res) => {
       if (res.code === 200) {
         commit("STOREBANNERDATA", res.data);
+      }
+    });
+  },
+  getFloorData({ commit }) {
+    getMockFloorData().then((res) => {
+      if (res.code === 200) {
+        commit("STOREFLOORDATA", res.data);
       }
     });
   },

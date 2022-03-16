@@ -8,12 +8,14 @@ import VueRouter from "vue-router";
 import store from "./store";
 
 import TripMenu from "@/components/TripMenu";
+import CarouselComponent from "@/components/Carousel";
 
 import "@/mock/mockServe";
 
 import "swiper/css/swiper.css";
 
 Vue.component(TripMenu.name, TripMenu);
+Vue.component(CarouselComponent.name, CarouselComponent);
 
 const originPush = VueRouter.prototype.push;
 const originReplace = VueRouter.prototype.replace;
