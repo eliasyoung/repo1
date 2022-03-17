@@ -132,7 +132,22 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "AppSearch",
-
+  data() {
+    return {
+      searchParams: {
+        category1Id: "",
+        category2Id: "",
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        order: "",
+        pageNo: 1,
+        pageSize: 3,
+        props: [],
+        tradeMark: "",
+      },
+    };
+  },
   components: {
     SearchSelector,
   },
@@ -141,8 +156,36 @@ export default {
       goodsList: "getSearchGoodsList",
     }),
   },
+  methods: {
+    getSearchListData() {
+      this.$store.dispatch("search/getSearchListData", this.searchParams);
+    },
+    mergeQueryAndParams() {
+      this.searchParams = Object.assign(
+        this.searchParams,
+        this.$route.query,
+        this.$route.params
+      );
+      /* this.searchParams = {
+        ...this.searchParams,
+        ...this.$route.query,
+        ...this.$route.params,
+      }; */
+    },
+  },
+  watch: {
+    $route: {
+      handler() {
+        this.mergeQueryAndParams();
+        this.getSearchListData();
+      },
+    },
+  },
+  beforeMount() {
+    this.mergeQueryAndParams();
+  },
   mounted() {
-    this.$store.dispatch("search/getSearchListData", {});
+    this.getSearchListData();
   },
 };
 </script>
