@@ -18,7 +18,17 @@ const actions = {
     });
   },
 };
-const getters = {};
+const getters = {
+  getSearchGoodsList(state) {
+    return state.searchListData.goodsList || [];
+  },
+  getSearchAttrsList(state) {
+    return state.searchListData.attrsList || [];
+  },
+  getSearchTradeMarksList(state) {
+    return state.searchListData.trademarkList || [];
+  },
+};
 
 export default {
   namespaced: true,
