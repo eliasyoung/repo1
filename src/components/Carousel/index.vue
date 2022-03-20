@@ -34,9 +34,9 @@ export default {
       required: true,
     },
   },
-  watch: {
+  /* watch: {
     carouselData: {
-      handler(oldV, newV) {
+      handler(newV, oldV) {
         if (this.initInWatch) {
           this.$nextTick(() => {
             const swiper = new Swiper(this.$refs.mySwiper, {
@@ -60,12 +60,12 @@ export default {
                 prevEl: ".swiper-button-prev",
               },
             });
-            return [swiper, oldV, newV];
+            return [swiper, newV, oldV];
           });
         }
       },
     },
-  },
+  }, */
   mounted() {
     if (!this.initInWatch) {
       const swiper = new Swiper(this.$refs.mySwiper, {
@@ -90,6 +90,33 @@ export default {
         },
       });
       return swiper;
+    } else {
+      this.$watch("carouselData", (newV, oldV) => {
+        this.$nextTick(() => {
+          const swiper = new Swiper(this.$refs.mySwiper, {
+            // configure Swiper to use modules
+            loop: true,
+
+            autoplay: {
+              delay: 3000,
+              disableOnInteraction: false,
+            },
+
+            // If we need pagination
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+
+            // Navigation arrows
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
+          return [swiper, newV, oldV];
+        });
+      });
     }
   },
 };

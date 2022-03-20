@@ -19,7 +19,10 @@
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector
+          :tradeMarksList="tradeMarksList"
+          :attrsList="attrsList"
+        />
 
         <!--details-->
         <div class="details clearfix">
@@ -142,7 +145,7 @@ export default {
         keyword: "",
         order: "",
         pageNo: 1,
-        pageSize: 3,
+        pageSize: 20,
         props: [],
         tradeMark: "",
       },
@@ -154,6 +157,8 @@ export default {
   computed: {
     ...mapGetters("search", {
       goodsList: "getSearchGoodsList",
+      tradeMarksList: "getSearchTradeMarksList",
+      attrsList: "getSearchAttrsList",
     }),
   },
   methods: {
@@ -161,11 +166,7 @@ export default {
       this.$store.dispatch("search/getSearchListData", this.searchParams);
     },
     mergeQueryAndParams() {
-      this.searchParams = Object.assign(
-        this.searchParams,
-        this.$route.query,
-        this.$route.params
-      );
+      Object.assign(this.searchParams, this.$route.query, this.$route.params);
       /* this.searchParams = {
         ...this.searchParams,
         ...this.$route.query,
@@ -176,6 +177,9 @@ export default {
   watch: {
     $route: {
       handler() {
+        this.searchParams.category1Id = "";
+        this.searchParams.category2Id = "";
+        this.searchParams.category3Id = "";
         this.mergeQueryAndParams();
         this.getSearchListData();
       },
