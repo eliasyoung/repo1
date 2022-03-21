@@ -4,7 +4,11 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="trademark in tradeMarksList" :key="trademark.tmId">
+          <li
+            v-for="trademark in tradeMarksList"
+            :key="trademark.tmId"
+            @click="passTrademark(trademark)"
+          >
             {{ trademark.tmName }}
           </li>
         </ul>
@@ -34,6 +38,11 @@ export default {
   props: {
     tradeMarksList: Array,
     attrsList: Array,
+  },
+  methods: {
+    passTrademark(trademark) {
+      this.$emit("getByTrademark", trademark);
+    },
   },
 };
 </script>

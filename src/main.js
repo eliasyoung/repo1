@@ -48,6 +48,9 @@ new Vue({
   render: (h) => h(App),
   router,
   store,
+  created() {
+    Vue.prototype.$bus = this;
+  },
   mounted() {
     // store.dispatch("home/getBaseCategoryList");
   },

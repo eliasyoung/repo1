@@ -11,10 +11,17 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{ searchParams.categoryName
+              }}<i @click="deleteBread('query')">×</i>
+            </li>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="deleteBread('params')">×</i>
+            </li>
+            <li class="with-x" v-if="searchParams.trademark">
+              {{ searchParams.trademark.split(":")[1]
+              }}<i @click="deleteBread('trademark')">×</i>
+            </li>
           </ul>
         </div>
 
@@ -22,6 +29,7 @@
         <SearchSelector
           :tradeMarksList="tradeMarksList"
           :attrsList="attrsList"
+          @getByTrademark="getByTrademark"
         />
 
         <!--details-->
@@ -138,16 +146,16 @@ export default {
   data() {
     return {
       searchParams: {
-        category1Id: "",
-        category2Id: "",
-        category3Id: "",
-        categoryName: "",
-        keyword: "",
+        category1Id: undefined,
+        category2Id: undefined,
+        category3Id: undefined,
+        categoryName: undefined,
+        keyword: undefined,
         order: "",
         pageNo: 1,
         pageSize: 20,
         props: [],
-        tradeMark: "",
+        trademark: undefined,
       },
     };
   },
@@ -173,13 +181,36 @@ export default {
         ...this.$route.params,
       }; */
     },
+    deleteBread(target) {
+      if (target == "trademark") {
+        this.searchParams.trademark = undefined;
+        this.getSearchListData();
+      } else {
+        this.$router.push({
+          name: "search",
+          query: this.$route.query,
+          params: this.$route.params,
+          [target]: undefined,
+        });
+        if (JSON.stringify(this.$route.params) == "{}") {
+          this.$bus.$emit("clearSearchBar");
+        }
+      }
+    },
+    getByTrademark(trademark) {
+      this.searchParams.trademark = trademark.tmId + ":" + trademark.tmName;
+      this.mergeQueryAndParams();
+      this.getSearchListData();
+    },
   },
   watch: {
     $route: {
       handler() {
-        this.searchParams.category1Id = "";
-        this.searchParams.category2Id = "";
-        this.searchParams.category3Id = "";
+        this.searchParams.category1Id = undefined;
+        this.searchParams.category2Id = undefined;
+        this.searchParams.category3Id = undefined;
+        this.searchParams.categoryName = undefined;
+        this.searchParams.keyword = undefined;
         this.mergeQueryAndParams();
         this.getSearchListData();
       },

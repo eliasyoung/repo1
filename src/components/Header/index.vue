@@ -83,6 +83,14 @@ export default {
       });
     },
   },
+  created() {
+    this.$bus.$on("clearSearchBar", () => {
+      this.searchKeyword = "";
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("clearSearchBar");
+  },
 };
 </script>
 
