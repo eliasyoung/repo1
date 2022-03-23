@@ -23,7 +23,7 @@
       <div class="fl value">
         <ul class="type-list">
           <li v-for="(value, index) in attr.attrValueList" :key="index">
-            <a>{{ value }}</a>
+            <a @click="pushPropsArray(attr, value)">{{ value }}</a>
           </li>
         </ul>
       </div>
@@ -42,6 +42,10 @@ export default {
   methods: {
     passTrademark(trademark) {
       this.$emit("getByTrademark", trademark);
+    },
+    pushPropsArray(attrObject, attrValue) {
+      let str = `${attrObject.attrId}:${attrValue}:${attrObject.attrName}`;
+      this.$emit("getByProps", str);
     },
   },
 };

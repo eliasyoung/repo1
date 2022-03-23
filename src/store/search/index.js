@@ -28,6 +28,10 @@ const getters = {
   getSearchTradeMarksList(state) {
     return state.searchListData.trademarkList || [];
   },
+  getSearchPageInfo(state) {
+    let { pageNo, pageSize, total, totalPages } = state.searchListData;
+    return { pageNo, pageSize, total, totalPages };
+  },
 };
 
 export default {

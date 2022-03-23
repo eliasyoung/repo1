@@ -22,14 +22,23 @@
               {{ searchParams.trademark.split(":")[1]
               }}<i @click="deleteBread('trademark')">×</i>
             </li>
+            <li
+              class="with-x"
+              v-for="(prop, index) in searchParams.props"
+              :key="index"
+            >
+              {{ prop.split(":")[1] }}
+              <i @click="deleteBread('props', index)">×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
         <SearchSelector
-          :tradeMarksList="tradeMarksList"
-          :attrsList="attrsList"
+          :trade-marks-list="tradeMarksList"
+          :attrs-list="attrsList"
           @getByTrademark="getByTrademark"
+          @getByProps="getByProps"
         />
 
         <!--details-->
@@ -37,23 +46,35 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: isOrderSelected }"
+                  @click="changeOrder('1')"
+                >
+                  <a href="#"
+                    >综合<span
+                      class="iconfont"
+                      v-show="isOrderSelected"
+                      :class="{
+                        'icon-up': !orderDescOrAsc,
+                        'icon-down': orderDescOrAsc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  :class="{ active: !isOrderSelected }"
+                  @click="changeOrder('2')"
+                >
+                  <a href="#"
+                    >价格<span
+                      class="iconfont"
+                      v-show="!isOrderSelected"
+                      :class="{
+                        'icon-up': !orderDescOrAsc,
+                        'icon-down': orderDescOrAsc,
+                      }"
+                    ></span
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -74,12 +95,9 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a
-                      target="_blank"
-                      href="item.html"
-                      title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】"
-                      >{{ goods.title }}</a
-                    >
+                    <a target="_blank" href="item.html" title="">{{
+                      goods.title
+                    }}</a>
                   </div>
                   <div class="commit">
                     <i class="command"
@@ -102,35 +120,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <PaginationComponent
+            v-if="pageInfo.pageNo != undefined"
+            :current-page="pageInfo.pageNo"
+            :page-size="pageInfo.pageSize"
+            :total="pageInfo.total"
+            :page-count="pageInfo.totalPages"
+            @changeCurrentPage="changeCurrentPage"
+          />
         </div>
       </div>
     </div>
@@ -151,9 +148,9 @@ export default {
         category3Id: undefined,
         categoryName: undefined,
         keyword: undefined,
-        order: "",
+        order: "1:desc",
         pageNo: 1,
-        pageSize: 20,
+        pageSize: 3,
         props: [],
         trademark: undefined,
       },
@@ -167,7 +164,16 @@ export default {
       goodsList: "getSearchGoodsList",
       tradeMarksList: "getSearchTradeMarksList",
       attrsList: "getSearchAttrsList",
+      pageInfo: "getSearchPageInfo",
     }),
+    isOrderSelected() {
+      if (this.searchParams.order.includes("1")) return true;
+      else return false;
+    },
+    orderDescOrAsc() {
+      if (this.searchParams.order.includes("desc")) return true;
+      else return false;
+    },
   },
   methods: {
     getSearchListData() {
@@ -181,9 +187,12 @@ export default {
         ...this.$route.params,
       }; */
     },
-    deleteBread(target) {
+    deleteBread(target, index = null) {
       if (target == "trademark") {
         this.searchParams.trademark = undefined;
+        this.getSearchListData();
+      } else if (target == "props") {
+        this.searchParams.props.splice(index, 1);
         this.getSearchListData();
       } else {
         this.$router.push({
@@ -199,6 +208,29 @@ export default {
     },
     getByTrademark(trademark) {
       this.searchParams.trademark = trademark.tmId + ":" + trademark.tmName;
+      this.mergeQueryAndParams();
+      this.getSearchListData();
+    },
+    getByProps(prop) {
+      if (!this.searchParams.props.includes(prop)) {
+        this.searchParams.props.push(prop);
+        this.mergeQueryAndParams();
+        this.getSearchListData();
+      }
+    },
+    changeOrder(index) {
+      if (this.searchParams.order.includes(index)) {
+        this.searchParams.order = this.orderDescOrAsc
+          ? `${index}:asc`
+          : `${index}:desc`;
+      } else {
+        this.searchParams.order = `${index}:desc`;
+      }
+      this.mergeQueryAndParams();
+      this.getSearchListData();
+    },
+    changeCurrentPage(num) {
+      this.searchParams.pageNo = num;
       this.mergeQueryAndParams();
       this.getSearchListData();
     },
@@ -464,93 +496,6 @@ export default {
                 }
               }
             }
-          }
-        }
-      }
-
-      .page {
-        width: 733px;
-        height: 66px;
-        overflow: hidden;
-        float: right;
-
-        .sui-pagination {
-          margin: 18px 0;
-
-          ul {
-            margin-left: 0;
-            margin-bottom: 0;
-            vertical-align: middle;
-            width: 490px;
-            float: left;
-
-            li {
-              line-height: 18px;
-              display: inline-block;
-
-              a {
-                position: relative;
-                float: left;
-                line-height: 18px;
-                text-decoration: none;
-                background-color: #fff;
-                border: 1px solid #e0e9ee;
-                margin-left: -1px;
-                font-size: 14px;
-                padding: 9px 18px;
-                color: #333;
-              }
-
-              &.active {
-                a {
-                  background-color: #fff;
-                  color: #e1251b;
-                  border-color: #fff;
-                  cursor: default;
-                }
-              }
-
-              &.prev {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-
-              &.disabled {
-                a {
-                  color: #999;
-                  cursor: default;
-                }
-              }
-
-              &.dotted {
-                span {
-                  margin-left: -1px;
-                  position: relative;
-                  float: left;
-                  line-height: 18px;
-                  text-decoration: none;
-                  background-color: #fff;
-                  font-size: 14px;
-                  border: 0;
-                  padding: 9px 18px;
-                  color: #333;
-                }
-              }
-
-              &.next {
-                a {
-                  background-color: #fafafa;
-                }
-              }
-            }
-          }
-
-          div {
-            color: #333;
-            font-size: 14px;
-            float: right;
-            width: 241px;
           }
         }
       }

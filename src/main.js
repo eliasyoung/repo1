@@ -9,6 +9,7 @@ import store from "./store";
 
 import TripMenu from "@/components/TripMenu";
 import CarouselComponent from "@/components/Carousel";
+import PaginationComponent from "@/components/Pagination";
 
 import "@/mock/mockServe";
 
@@ -16,6 +17,7 @@ import "swiper/css/swiper.css";
 
 Vue.component(TripMenu.name, TripMenu);
 Vue.component(CarouselComponent.name, CarouselComponent);
+Vue.component(PaginationComponent.name, PaginationComponent);
 
 const originPush = VueRouter.prototype.push;
 const originReplace = VueRouter.prototype.replace;
