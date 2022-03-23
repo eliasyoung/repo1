@@ -25,3 +25,10 @@ export const getMockFloorData = () => mockRequests.get("/floor");
   });
 }; */
 export const getSearchListData = (params) => requests.post("/list", params);
+
+export const getDetailData = (skuId) => {
+  return requests({
+    method: "get",
+    url: `/item/${skuId}`,
+  });
+};

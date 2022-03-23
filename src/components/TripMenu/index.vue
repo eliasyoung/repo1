@@ -124,7 +124,8 @@ export default {
     menuLeaveHandler() {
       this.currentFirstNavIndex = -1;
       // if (this.$route.path === "/search") this.showMenu = false;
-      if (this.$route.name === "search") this.showMenu = false;
+      if (this.$route.name === "search" || this.$route.name === "detail")
+        this.showMenu = false;
     },
     showTripMenu() {
       this.showMenu = true;
