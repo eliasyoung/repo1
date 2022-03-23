@@ -125,7 +125,6 @@
             :current-page="pageInfo.pageNo"
             :page-size="pageInfo.pageSize"
             :total="pageInfo.total"
-            :page-count="pageInfo.totalPages"
             @changeCurrentPage="changeCurrentPage"
           />
         </div>
@@ -150,7 +149,7 @@ export default {
         keyword: undefined,
         order: "1:desc",
         pageNo: 1,
-        pageSize: 3,
+        pageSize: 10,
         props: [],
         trademark: undefined,
       },

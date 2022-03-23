@@ -11,12 +11,6 @@
     >
       ···
     </button>
-
-    <!-- <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
-    <button>7</button> -->
     <button
       v-for="(page, index) in pagerArray"
       :key="index"
@@ -33,14 +27,14 @@
       ···
     </button>
     <button
-      v-if="pageCount != 1"
-      :class="{ active: currentPage == pageCount }"
-      @click="goPage(pageCount)"
+      v-if="totalPages != 1"
+      :class="{ active: currentPage == totalPages }"
+      @click="goPage(totalPages)"
     >
-      {{ pageCount }}
+      {{ totalPages }}
     </button>
     <button
-      :disabled="currentPage == pageCount"
+      :disabled="currentPage == totalPages"
       @click="goPage(currentPage + 1)"
     >
       下一页
@@ -69,7 +63,7 @@ export default {
     },
     pageCount: {
       type: Number,
-      required: true,
+      required: false,
     },
     pagerCount: {
       type: Number,
@@ -82,23 +76,29 @@ export default {
       return this.currentPage - (this.pagerCount - 3) / 2 > 2;
     },
     showNextButton() {
-      return this.currentPage + (this.pagerCount - 3) / 2 < this.pageCount - 1;
+      return this.currentPage + (this.pagerCount - 3) / 2 < this.totalPages - 1;
+    },
+    totalPages() {
+      if (this.pageCount != undefined) return this.pageCount;
+      else {
+        return Math.ceil(this.total / this.pageSize);
+      }
     },
     pagerArray() {
       let start = 2;
       let pagerArray = [];
-      if (this.pageCount > this.pagerCount) {
+      if (this.totalPages > this.pagerCount) {
         if (this.showPreButton && this.showNextButton) {
           start = this.currentPage - (this.pagerCount - 3) / 2;
         } else if (this.showPreButton && !this.showNextButton) {
-          start = this.pageCount - (this.pagerCount - 2);
+          start = this.totalPages - (this.pagerCount - 2);
         }
         for (let i = 0; i < this.pagerCount - 2; i++) {
           pagerArray.push(start);
           start++;
         }
       } else {
-        for (let i = 0; i < this.pageCount - 2; i++) {
+        for (let i = 0; i < this.totalPages - 2; i++) {
           pagerArray.push(start);
           start++;
         }
@@ -111,7 +111,7 @@ export default {
     goPage(num) {
       if (num != this.currentPage) {
         if (num < 1) num = 1;
-        if (num > this.pageCount) num = this.pageCount;
+        if (num > this.totalPages) num = this.totalPages;
         this.$emit("changeCurrentPage", num);
       }
     },
