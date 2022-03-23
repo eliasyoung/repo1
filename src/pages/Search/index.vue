@@ -125,6 +125,7 @@
             :current-page="pageInfo.pageNo"
             :page-size="pageInfo.pageSize"
             :total="pageInfo.total"
+            :pager-count="5"
             @changeCurrentPage="changeCurrentPage"
           />
         </div>

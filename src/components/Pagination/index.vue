@@ -68,6 +68,9 @@ export default {
     pagerCount: {
       type: Number,
       required: false,
+      validator(value) {
+        return value > 4 && value < 22 && value % 2 == 1;
+      },
       default: 7,
     },
   },
