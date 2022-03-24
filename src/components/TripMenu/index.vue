@@ -78,6 +78,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { throttle } from "@/config/index";
 
 export default {
   name: "TripMenu",
@@ -135,25 +136,10 @@ export default {
     // if (this.$store.state.home.baseCategoryList.length == 0) {
     //   this.$store.dispatch("home/getBaseCategoryList");
     // }
-    if (this.$route.name === "search") this.showMenu = false;
+    if (this.$route.name === "search" || this.$route.name === "detail")
+      this.showMenu = false;
   },
 };
-
-function throttle(func, delay) {
-  let valid = true;
-  return function () {
-    if (!valid) {
-      //休息时间 暂不接客
-      return false;
-    }
-    // 工作时间，执行函数并且在间隔期内把状态位设为无效
-    valid = false;
-    func.apply(this, arguments);
-    setTimeout(() => {
-      valid = true;
-    }, delay);
-  };
-}
 </script>
 
 <style lang="less" scoped>

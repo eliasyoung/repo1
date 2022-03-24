@@ -1,21 +1,65 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
+    <img :src="imageList[currentImageIndex].imgUrl" />
+    <div class="event" @mousemove.self="moveMask"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <img :src="imageList[currentImageIndex].imgUrl" ref="bigImage" />
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
 <script>
+import { throttle } from "@/config";
+
 export default {
   name: "ZoomComponent",
+  props: ["imageList"],
+  data() {
+    return {
+      currentImageIndex: 0,
+    };
+  },
+  /* computed: {
+    currentImageUrl() {
+      return this.imageList[this.currentImageIndex].imgUrl;
+    },
+  }, */
+  methods: {
+    moveMask: throttle(function (event) {
+      // console.log(event.offsetX, event.offsetY);
+      // console.log(this.$refs.mask.offsetHeight, this.$refs.mask.offsetWidth);
+      const { offsetWidth: maskWidth, offsetHeight: maskHeight } =
+        this.$refs.mask;
+      const {
+        offsetX: x,
+        offsetY: y,
+        target: { offsetWidth: targetWidth, offsetHeight: targetHeight },
+      } = event;
+      this.$refs.mask.style.left = x - maskWidth / 2 + "px";
+      this.$refs.mask.style.top = y - maskHeight / 2 + "px";
+      if (x - maskWidth / 2 < 0) this.$refs.mask.style.left = 0;
+      if (x + maskWidth / 2 > targetWidth)
+        this.$refs.mask.style.left = targetWidth - maskWidth + "px";
+      if (y - maskHeight / 2 < 0) this.$refs.mask.style.top = 0;
+      if (y + maskHeight / 2 > targetHeight)
+        this.$refs.mask.style.top = targetHeight - maskHeight + "px";
+      this.$refs.bigImage.style.top = -this.$refs.mask.offsetTop * 2 + "px";
+      this.$refs.bigImage.style.left = -this.$refs.mask.offsetLeft * 2 + "px";
+    }, 50),
+  },
+  created() {
+    this.$bus.$on("changeCurrentImage", (index) => {
+      this.currentImageIndex = index;
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("changeCurrentImage");
+  },
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .spec-preview {
   position: relative;
   width: 400px;

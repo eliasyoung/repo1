@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Router from "vue-router";
 
+import routes from "./routes";
+
 Vue.use(Router);
 
 // import Home from "@/pages/Home/index.vue";
@@ -9,38 +11,9 @@ Vue.use(Router);
 // import Register from "@/pages/Register/index.vue";
 // import Login from "@/pages/Login/index.vue";
 
-const Home = () => import("@/pages/Home/index.vue");
-const Search = () => import("@/pages/Search/index.vue");
-const Register = () => import("@/pages/Register/index.vue");
-const Login = () => import("@/pages/Login/index.vue");
-const Detail = () => import("@/pages/Detail/index.vue");
-
 export default new VueRouter({
-  routes: [
-    {
-      path: "/home",
-      component: Home,
-    },
-    {
-      path: "/search/:keyword?",
-      // path: "/search",
-      component: Search,
-      name: "search",
-    },
-    {
-      path: "/register",
-      component: Register,
-      meta: { hideFooter: true },
-    },
-    { path: "/login", component: Login, meta: { hideFooter: true } },
-    {
-      path: "/detail/:skuId",
-      component: Detail,
-      name: "detail",
-    },
-    {
-      path: "*",
-      redirect: "/home",
-    },
-  ],
+  routes,
+  scrollBehavior(to) {
+    if (to.name == "detail") return { y: 0 };
+  },
 });

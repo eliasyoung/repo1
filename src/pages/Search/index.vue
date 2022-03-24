@@ -84,7 +84,10 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <a
+                      :href="`/detail/${goods.id}`"
+                      target="_blank"
+                      @click.prevent="goDetailPage(goods.id)"
                       ><img :src="goods.defaultImg"
                     /></a>
                   </div>
@@ -95,9 +98,13 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html" title="">{{
-                      goods.title
-                    }}</a>
+                    <a
+                      target="_blank"
+                      :href="`/detail/${goods.id}`"
+                      title=""
+                      @click.prevent="goDetailPage(goods.id)"
+                      >{{ goods.title }}</a
+                    >
                   </div>
                   <div class="commit">
                     <i class="command"
@@ -233,6 +240,12 @@ export default {
       this.searchParams.pageNo = num;
       this.mergeQueryAndParams();
       this.getSearchListData();
+    },
+    goDetailPage(skuId) {
+      this.$router.push({
+        name: "detail",
+        params: { skuId },
+      });
     },
   },
   watch: {
