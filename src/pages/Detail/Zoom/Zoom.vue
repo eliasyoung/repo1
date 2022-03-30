@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { throttle } from "@/config";
+import { throttle } from "@/utils";
 
 export default {
   name: "ZoomComponent",

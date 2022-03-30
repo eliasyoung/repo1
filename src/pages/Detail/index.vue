@@ -81,39 +81,42 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl
+                v-for="(spuSaleAttr, outterIndex) in spuSaleAttrList"
+                :key="spuSaleAttr.id"
+              >
+                <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
+                <dd
+                  changepirce="0"
+                  v-for="(
+                    spuSaleAttrValue, innerIndex
+                  ) in spuSaleAttr.spuSaleAttrValueList"
+                  :class="{ active: spuSaleAttrValue.isChecked == 1 }"
+                  :key="spuSaleAttrValue.id"
+                  @click="changeActiveAttr(outterIndex, innerIndex)"
+                >
+                  {{ spuSaleAttrValue.saleAttrValueName }}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  @change="skuNumChangedHandler"
+                />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum > 1 ? skuNum-- : (skuNum = 1)"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -358,6 +361,11 @@ import Zoom from "./Zoom/Zoom";
 
 export default {
   name: "DetailComponent",
+  data() {
+    return {
+      skuNum: 1,
+    };
+  },
   computed: {
     ...mapGetters("detail", [
       "categoryView",
@@ -369,9 +377,40 @@ export default {
       return this.skuInfo.skuImageList || [{}];
     },
   },
+  methods: {
+    changeActiveAttr(outter, inner) {
+      /* arr.forEach((v) => {
+        v.isChecked = "0";
+      });
+      arr[index].isChecked = "1"; */
+      this.$store.commit("detail/CHECKSELECTEDATTR", { outter, inner });
+    },
+    skuNumChangedHandler(event) {
+      const value = event.target.value * 1;
+      if (isNaN(value) || value < 1) this.skuNum = 1;
+      else {
+        this.skuNum = value;
+      }
+    },
+    addToCart() {
+      this.$store
+        .dispatch("detail/addToCart", {
+          skuId: this.$route.params.skuId,
+          skuNum: this.skuNum,
+        })
+        .then(() => {
+          sessionStorage.setItem("addedItemInfo", JSON.stringify(this.skuInfo));
+          sessionStorage.setItem("addedItemNum", this.skuNum);
+          this.$router.push({
+            path: "/addcartsuccess",
+          });
+        })
+        .catch((err) => {
+          console.log(err, "reject!");
+        });
+    },
+  },
   mounted() {
-    // console.log(this.$route.params);
-
     this.$store.dispatch("detail/getDetailData", this.$route.params.skuId);
     // window.scrollTo(0, 0);
   },

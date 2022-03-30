@@ -3,6 +3,8 @@ const Search = () => import("@/pages/Search/index.vue");
 const Register = () => import("@/pages/Register/index.vue");
 const Login = () => import("@/pages/Login/index.vue");
 const Detail = () => import("@/pages/Detail/index.vue");
+const AddCartSuccess = () => import("@/pages/AddCartSuccess/index.vue");
+const ShoppingCart = () => import("@/pages/ShoppingCart/index.vue");
 
 export default [
   {
@@ -25,6 +27,16 @@ export default [
     path: "/detail/:skuId",
     component: Detail,
     name: "detail",
+  },
+  {
+    path: "/addcartsuccess",
+    name: "addcartsuccess",
+    component: AddCartSuccess,
+  },
+  {
+    path: "/shoppingcart",
+    name: "shoppingcart",
+    component: ShoppingCart,
   },
   {
     path: "*",

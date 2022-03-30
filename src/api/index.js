@@ -32,3 +32,8 @@ export const getDetailData = (skuId) => {
     url: `/item/${skuId}`,
   });
 };
+
+export const addToCart = (skuId, skuNum) =>
+  requests.post(`/cart/addToCart/${skuId}/${skuNum}`);
+
+export const getCartList = () => requests.get("/cart/cartList");

@@ -7,7 +7,10 @@
         :key="imageObj.id"
         @click="changeCurrentImage(index)"
       >
-        <img :src="imageObj.imgUrl" />
+        <img
+          :src="imageObj.imgUrl"
+          :class="{ active: index == currentIndex }"
+        />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -20,6 +23,11 @@ import Swiper from "swiper";
 export default {
   name: "ImageList",
   props: ["imageList"],
+  data() {
+    return {
+      currentIndex: 0,
+    };
+  },
   watch: {
     imageList: {
       handler(newV, oldV) {
@@ -48,6 +56,7 @@ export default {
   },
   methods: {
     changeCurrentImage(index) {
+      this.currentIndex = index;
       this.$bus.$emit("changeCurrentImage", index);
     },
   },
@@ -75,11 +84,6 @@ export default {
       display: block;
 
       &.active {
-        border: 2px solid #f60;
-        padding: 1px;
-      }
-
-      &:hover {
         border: 2px solid #f60;
         padding: 1px;
       }

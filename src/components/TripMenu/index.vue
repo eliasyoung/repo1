@@ -78,7 +78,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { throttle } from "@/config/index";
+import { throttle } from "@/utils/index";
 
 export default {
   name: "TripMenu",
