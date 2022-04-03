@@ -37,3 +37,12 @@ export const addToCart = (skuId, skuNum) =>
   requests.post(`/cart/addToCart/${skuId}/${skuNum}`);
 
 export const getCartList = () => requests.get("/cart/cartList");
+
+export const deleteCartItem = (skuId) =>
+  requests.delete(`/cart/deleteCart/${skuId}`);
+
+export const reqToggleItemChecked = (skuId, isChecked) =>
+  requests({
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
+    method: "get",
+  });

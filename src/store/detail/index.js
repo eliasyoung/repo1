@@ -1,7 +1,9 @@
 import { getDetailData, addToCart } from "@/api";
+import { getNanoID } from "@/utils";
 
 const state = {
   detailData: {},
+  nanoid_token: getNanoID(),
 };
 const mutations = {
   GETDETAILDATA(state, payload) {
