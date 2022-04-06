@@ -3,13 +3,21 @@
     <!-- 头部的第一行 -->
     <div class="top">
       <div class="container">
-        <div class="loginList">
+        <div v-if="JSON.stringify(userInfo) == '{}'" class="loginList">
           <p>尚品汇欢迎您！</p>
           <p>
             <span>请</span>
             <router-link to="/login">登陆</router-link>
             <!-- <a href="###" class="register">免费注册</a> -->
             <router-link to="/register" class="register">免费注册</router-link>
+          </p>
+        </div>
+        <div v-else class="loginList">
+          <p>尚品汇欢迎您！</p>
+          <p>
+            <a>{{ userInfo.nickName }}</a>
+            <!-- <a href="###" class="register">免费注册</a> -->
+            <a class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -53,12 +61,17 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "AppHeader",
   data() {
     return {
       searchKeyword: "",
     };
+  },
+  computed: {
+    ...mapState("user", ["userInfo"]),
   },
   methods: {
     searchSth() {
@@ -81,6 +94,10 @@ export default {
         query: this.$route.query,
         // query: { k: this.searchKeyword.toUpperCase() },
       });
+    },
+    async logout() {
+      await this.$store.dispatch("user/logoutUser");
+      this.$router.push("/home");
     },
   },
   created() {

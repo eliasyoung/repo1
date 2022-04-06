@@ -10,7 +10,9 @@ const requests = axios.create({
 });
 
 requests.interceptors.request.use((config) => {
-  if (store.state.detail.nanoid_token) {
+  if (store.state.user.token) {
+    config.headers.token = store.state.user.token;
+  } else if (store.state.detail.nanoid_token) {
     config.headers.userTempId = store.state.detail.nanoid_token;
   }
   nprogress.start();

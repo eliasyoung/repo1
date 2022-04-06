@@ -38,6 +38,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch("home/getFloorData");
+    if (localStorage.getItem("token"))
+      this.$store.dispatch("user/getUserInfoByToken");
   },
 };
 </script>

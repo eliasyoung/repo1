@@ -46,3 +46,35 @@ export const reqToggleItemChecked = (skuId, isChecked) =>
     url: `/cart/checkCart/${skuId}/${isChecked}`,
     method: "get",
   });
+
+export const reqGetRegisterCode = (phone) =>
+  requests({
+    url: `/user/passport/sendCode/${phone}`,
+    method: "get",
+  });
+
+export const reqRegisterUser = (data) =>
+  requests({
+    url: "/user/passport/register",
+    method: "post",
+    data,
+  });
+
+export const reqLogin = (data) =>
+  requests({
+    url: "/user/passport/login",
+    method: "post",
+    data,
+  });
+
+export const reqGetUserInfoByToken = () =>
+  requests({
+    url: "/user/passport/auth/getUserInfo",
+    methods: "get",
+  });
+
+export const reqLogout = () =>
+  requests({
+    url: "/user/passport/logout",
+    method: "get",
+  });
